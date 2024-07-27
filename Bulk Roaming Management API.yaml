@@ -1,419 +1,212 @@
-openapi: 3.0.3
+swagger: "2.0"
 info:
-  title: Bulk Roaming Management API
-  description: API para gestionar el estado, consumo y obtención de status de roaming a granel.
-  version: 1.0.0
-servers:
-  - url: https://your-server-url.com/mfp/api/adapters/CL_RoamingGranelManagementAdapter_JAuthV3
+  title: "Bulk Roaming Management API"
+  description: "API para gestionar el estado, consumo y obtención de status de roaming a granel."
+  version: "1.0.0"
+host: "your-server-url.com"
+basePath: "/mfp/api/adapters/CL_RoamingGranelManagementAdapter_JAuthV3"
+schemes:
+  - "https"
 paths:
   /resource/BulkRoamingChangeStatus:
     post:
-      summary: Cambiar el estado del roaming a granel
-      description: Cambia el estado del roaming a granel para un suscriptor específico.
-      operationId: bulkRoamingChangeStatus
+      summary: "Cambiar el estado del roaming a granel"
+      description: "Cambia el estado del roaming a granel para un suscriptor específico."
+      operationId: "bulkRoamingChangeStatus"
       parameters:
-        - name: SubscriberId
-          in: query
+        - name: "SubscriberId"
+          in: "query"
           required: true
-          schema:
-            type: string
-          description: MSISDN para activar o desactivar Roaming Datos a Granel.
-        - name: ChannelId
-          in: query
+          type: "string"
+          description: "MSISDN para activar o desactivar Roaming Datos a Granel."
+        - name: "ChannelId"
+          in: "query"
           required: true
-          schema:
-            type: string
-          description: Canal de la solicitud (por ejemplo, "6" para APP).
-        - name: Action
-          in: query
+          type: "string"
+          description: "Canal de la solicitud (por ejemplo, '6' para APP)."
+        - name: "Action"
+          in: "query"
           required: true
-          schema:
-            type: string
-          description: Acción a ejecutar ("activar" o "desactivar").
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: object
-                properties:
-                  BulkRoamingChangeStatus:
-                    type: object
-                    properties:
-                      SubscriberId:
-                        type: string
-                      ChannelId:
-                        type: string
-                      Action:
-                        type: string
-                      CountryCode:
-                        type: string
-                      LineOfBusiness:
-                        type: string
-                      Token:
-                        type: string
-                      UserProfileID:
-                        type: string
-                      Version:
-                        type: string
-            examples:
-              BulkRoamingChangeStatusExample:
-                value:
-                  - BulkRoamingChangeStatus:
-                      SubscriberId: "56912345678"
-                      ChannelId: "6"
-                      Action: "activar"
-                      CountryCode: "CL"
-                      LineOfBusiness: "3"
-                      Token: "AppMovil-000000-a3e6-6abd-020a01aa32"
-                      UserProfileID: "6275736-1"
-                      Version: "5.6"
+          type: "string"
+          description: "Acción a ejecutar ('activar' o 'desactivar')."
       responses:
-        '200':
-          description: Respuesta exitosa
-          content:
-            application/json:
-              schema:
-                type: object
+        200:
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              isSuccessful:
+                type: "boolean"
+              BulkRoamingChangeStatusResponse:
+                type: "object"
                 properties:
-                  isSuccessful:
-                    type: boolean
-                  BulkRoamingChangeStatusResponse:
-                    type: object
-                    properties:
-                      newStatusDescription:
-                        type: string
-                      newStatusId:
-                        type: string
-              examples:
-                SuccessResponseExample:
-                  value:
-                    isSuccessful: true
-                    BulkRoamingChangeStatusResponse:
-                      newStatusDescription: "activo"
-                      newStatusId: "1"
-        '400':
-          description: Respuesta de error
-          content:
-            application/json:
-              schema:
-                type: object
+                  newStatusDescription:
+                    type: "string"
+                  newStatusId:
+                    type: "string"
+        400:
+          description: "Respuesta de error"
+          schema:
+            type: "object"
+            properties:
+              isSuccessful:
+                type: "boolean"
+              BulkRoamingGetStatusResponse:
+                type: "object"
                 properties:
-                  isSuccessful:
-                    type: boolean
-                  BulkRoamingGetStatusResponse:
-                    type: object
+                  responseDate:
+                    type: "string"
+                    format: "date-time"
+                  latency:
+                    type: "integer"
+                  errorList:
+                    type: "object"
                     properties:
-                      responseDate:
-                        type: string
-                        format: date-time
-                      latency:
-                        type: integer
-                      errorList:
-                        type: object
-                        properties:
-                          error:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                code:
-                                  type: string
-                                severityLevel:
-                                  type: string
-                                description:
-                                  type: string
-              examples:
-                ErrorResponseExample:
-                  value:
-                    isSuccessful: true
-                    BulkRoamingGetStatusResponse:
-                      responseDate: "2024-05-23T11:50:07.751-04:00"
-                      latency: 2
-                      errorList:
-                        error:
-                          - code: "BSERR-201"
-                            severityLevel: "3"
-                            description: "Error al consultar estado de Roaming a Granel"
+                      error:
+                        type: "array"
+                        items:
+                          type: "object"
+                          properties:
+                            code:
+                              type: "string"
+                            severityLevel:
+                              type: "string"
+                            description:
+                              type: "string"
   /resource/BulkRoamingGetConsumption:
     post:
-      summary: Obtener el consumo del roaming a granel
-      description: Obtiene la cuota y los consumos de roaming a granel para un suscriptor específico.
-      operationId: bulkRoamingGetConsumption
+      summary: "Obtener el consumo del roaming a granel"
+      description: "Obtiene la cuota y los consumos de roaming a granel para un suscriptor específico."
+      operationId: "bulkRoamingGetConsumption"
       parameters:
-        - name: SubscriberId
-          in: query
+        - name: "SubscriberId"
+          in: "query"
           required: true
-          schema:
-            type: string
-          description: MSISDN para obtener la cuota y consumos de Roaming Datos a Granel.
-        - name: ChannelId
-          in: query
+          type: "string"
+          description: "MSISDN para obtener la cuota y consumos de Roaming Datos a Granel."
+        - name: "ChannelId"
+          in: "query"
           required: true
-          schema:
-            type: string
-          description: Canal de la solicitud (por ejemplo, "6" para APP).
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: object
-                properties:
-                  BulkRoamingGetConsumption:
-                    type: object
-                    properties:
-                      SubscriberId:
-                        type: string
-                      ChannelId:
-                        type: string
-                      CountryCode:
-                        type: string
-                      LineOfBusiness:
-                        type: string
-                      Token:
-                        type: string
-                      UserProfileID:
-                        type: string
-                      Version:
-                        type: string
-            examples:
-              BulkRoamingGetConsumptionExample:
-                value:
-                  - BulkRoamingGetConsumption:
-                      SubscriberId: "56912345678"
-                      ChannelId: "6"
-                      CountryCode: "CL"
-                      LineOfBusiness: "3"
-                      Token: "AppMovil-000000-a3e6-6abd-020a01aa32"
-                      UserProfileID: "6275736-1"
-                      Version: "5.6"
+          type: "string"
+          description: "Canal de la solicitud (por ejemplo, '6' para APP)."
       responses:
-        '200':
-          description: Respuesta exitosa
-          content:
-            application/json:
-              schema:
-                type: object
+        200:
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              isSuccessful:
+                type: "boolean"
+              BulkRoamingGetConsumptionResponse:
+                type: "object"
                 properties:
-                  isSuccessful:
-                    type: boolean
-                  BulkRoamingGetConsumptionResponse:
-                    type: object
+                  consumptions:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        usageUnit:
+                          type: "string"
+                        description:
+                          type: "string"
+                        usageQuantity:
+                          type: "number"
+                        id:
+                          type: "string"
+                        quotaQuantity:
+                          type: "number"
+                        quotaUnit:
+                          type: "string"
+        400:
+          description: "Respuesta de error"
+          schema:
+            type: "object"
+            properties:
+              isSuccessful:
+                type: "boolean"
+              BulkRoamingGetConsumptionResponse:
+                type: "object"
+                properties:
+                  responseDate:
+                    type: "string"
+                    format: "date-time"
+                  latency:
+                    type: "integer"
+                  errorList:
+                    type: "object"
                     properties:
-                      consumptions:
-                        type: array
+                      error:
+                        type: "array"
                         items:
-                          type: object
+                          type: "object"
                           properties:
-                            usageUnit:
-                              type: string
+                            code:
+                              type: "string"
+                            severityLevel:
+                              type: "string"
                             description:
-                              type: string
-                            usageQuantity:
-                              type: number
-                            id:
-                              type: string
-                            quotaQuantity:
-                              type: number
-                            quotaUnit:
-                              type: string
-              examples:
-                SuccessResponseExample:
-                  value:
-                    isSuccessful: true
-                    BulkRoamingGetConsumptionResponse:
-                      consumptions:
-                        - usageUnit: "MB"
-                          description: "Roaming Datos a Granel (Paises sin Frontera Plus)"
-                          usageQuantity: 512
-                          id: "103501"
-                          quotaQuantity: -3
-                          quotaUnit: "MB"
-                        - usageUnit: "MB"
-                          description: "Roaming Datos a Granel (Paises Resto del Mundo)"
-                          usageQuantity: 512
-                          id: "103502"
-                          quotaQuantity: -3
-                          quotaUnit: "MB"
-                        - usageUnit: "GB"
-                          description: "Roaming Datos a Granel (Total)"
-                          usageQuantity: 1.0
-                          id: "10350"
-                          quotaQuantity: -3
-                          quotaUnit: "MB"
-        '400':
-          description: Respuesta de error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  isSuccessful:
-                    type: boolean
-                  BulkRoamingGetConsumptionResponse:
-                    type: object
-                    properties:
-                      responseDate:
-                        type: string
-                        format: date-time
-                      latency:
-                        type: integer
-                      errorList:
-                        type: object
-                        properties:
-                          error:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                code:
-                                  type: string
-                                severityLevel:
-                                  type: string
-                                description:
-                                  type: string
-              examples:
-                ErrorResponseExample:
-                  value:
-                    isSuccessful: true
-                    BulkRoamingGetConsumptionResponse:
-                      responseDate: "2024-05-23T11:50:07.751-04:00"
-                      latency: 2
-                      errorList:
-                        error:
-                          - code: "BSERR-401"
-                            severityLevel: "2"
-                            description: "Roaming Datos a Granel no está activo"
+                              type: "string"
   /resource/BulkRoamingGetStatus:
     post:
-      summary: Obtener el estado del roaming a granel
-      description: Obtiene el estado del roaming a granel para un suscriptor específico.
-      operationId: bulkRoamingGetStatus
+      summary: "Obtener el estado del roaming a granel"
+      description: "Obtiene el estado del roaming a granel para un suscriptor específico."
+      operationId: "bulkRoamingGetStatus"
       parameters:
-        - name: SubscriberId
-          in: query
+        - name: "SubscriberId"
+          in: "query"
           required: true
-          schema:
-            type: string
-          description: MSISDN para obtener el estado de Roaming Datos a Granel.
-        - name: ChannelId
-          in: query
+          type: "string"
+          description: "MSISDN para obtener el estado de Roaming Datos a Granel."
+        - name: "ChannelId"
+          in: "query"
           required: true
-          schema:
-            type: string
-          description: Canal de la solicitud (por ejemplo, "6" para APP).
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: object
-                properties:
-                  BulkRoamingGetStatus:
-                    type: object
-                    properties:
-                      SubscriberId:
-                        type: string
-                      ChannelId:
-                        type: string
-                      CountryCode:
-                        type: string
-                      LineOfBusiness:
-                        type: string
-                      Token:
-                        type: string
-                      UserProfileID:
-                        type: string
-                      Version:
-                        type: string
-            examples:
-              BulkRoamingGetStatusExample:
-                value:
-                  - BulkRoamingGetStatus:
-                      SubscriberId: "56912345678"
-                      ChannelId: "6"
-                      CountryCode: "CL"
-                      LineOfBusiness: "3"
-                      Token: "AppMovil-000000-a3e6-6abd-020a01aa32"
-                      UserProfileID: "6275736-1"
-                      Version: "5.6"
+          type: "string"
+          description: "Canal de la solicitud (por ejemplo, '6' para APP)."
       responses:
-        '200':
-          description: Respuesta exitosa
-          content:
-            application/json:
-              schema:
-                type: object
+        200:
+          description: "Respuesta exitosa"
+          schema:
+            type: "object"
+            properties:
+              isSuccessful:
+                type: "boolean"
+              BulkRoamingGetStatusResponse:
+                type: "object"
                 properties:
-                  isSuccessful:
-                    type: boolean
-                  BulkRoamingGetStatusResponse:
-                    type: object
-                    properties:
-                      statusDescription:
-                        type: string
-                      statusId:
-                        type: string
-                      roamingTypeDescription:
-                        type: string
-                      roamingTypeId:
-                        type: string
-              examples:
-                SuccessResponseExample:
-                  value:
-                    isSuccessful: true
-                    BulkRoamingGetStatusResponse:
-                      statusDescription: "Activo"
-                      statusId: "1"
-                      roamingTypeDescription: "Roaming Datos a Granel"
-                      roamingTypeId: "1"
-        '400':
-          description: Respuesta de error
-          content:
-            application/json:
-              schema:
-                type: object
+                  statusDescription:
+                    type: "string"
+                  statusId:
+                    type: "string"
+                  roamingTypeDescription:
+                    type: "string"
+                  roamingTypeId:
+                    type: "string"
+        400:
+          description: "Respuesta de error"
+          schema:
+            type: "object"
+            properties:
+              isSuccessful:
+                type: "boolean"
+              BulkRoamingGetStatusResponse:
+                type: "object"
                 properties:
-                  isSuccessful:
-                    type: boolean
-                  BulkRoamingGetStatusResponse:
-                    type: object
+                  responseDate:
+                    type: "string"
+                    format: "date-time"
+                  latency:
+                    type: "integer"
+                  errorList:
+                    type: "object"
                     properties:
-                      responseDate:
-                        type: string
-                        format: date-time
-                      latency:
-                        type: integer
-                      errorList:
-                        type: object
-                        properties:
-                          error:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                code:
-                                  type: string
-                                severityLevel:
-                                  type: string
-                                description:
-                                  type: string
-              examples:
-                ErrorResponseExample:
-                  value:
-                    isSuccessful: true
-                    BulkRoamingGetStatusResponse:
-                      responseDate: "2024-05-23T11:50:07.751-04:00"
-                      latency: 2
-                      errorList:
-                        error:
-                          - code: "BSERR-201"
-                            severityLevel: "3"
-                            description: "Error al consultar estado de Roaming a Granel"
+                      error:
+                        type: "array"
+                        items:
+                          type: "object"
+                          properties:
+                            code:
+                              type: "string"
+                            severityLevel:
+                              type: "string"
+                            description:
+                              type: "string"
